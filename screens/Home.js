@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   Text,
   View,
@@ -9,6 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
+
 import { Ionicons } from "@expo/vector-icons";
 import NewToDo from "../components/NewTodo";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -27,6 +28,9 @@ const Home = ({ user, setIsAuth }) => {
     );
   };
 
+  const clearInput = () => {
+    setTodo("");
+  };
   const handleDelete = async (id) => {
     try {
       const data = await AsyncStorage.getItem("data");
@@ -60,6 +64,10 @@ const Home = ({ user, setIsAuth }) => {
 
   const saveTodo = async () => {
     try {
+      if (!todo) {
+        Alert.alert("Input cannot be empty!");
+        return;
+      }
       const data = await AsyncStorage.getItem("data");
       const parsedData = JSON.parse(data);
 
@@ -73,7 +81,12 @@ const Home = ({ user, setIsAuth }) => {
           body: JSON.stringify(todo),
         }
       )
-        .then(() => Alert.alert("Saved Successfully."))
+        .then((res) => {
+          res = res.json();
+
+          fetchTodo();
+          Alert.alert("Saved Successfully.");
+        })
         .catch((e) => console.log(e));
 
       setModalVisible(!modalVisible);
@@ -92,6 +105,7 @@ const Home = ({ user, setIsAuth }) => {
         .then((res) => res.json())
         .then((data) => {
           let arr = [];
+
           for (let key in data) {
             if (!data.hasOwnProperty(key)) continue;
             arr.push({ id: key, todo: data[key] });
@@ -106,6 +120,7 @@ const Home = ({ user, setIsAuth }) => {
   };
 
   useEffect(() => {
+    console.log("gello");
     fetchTodo();
   }, []);
 

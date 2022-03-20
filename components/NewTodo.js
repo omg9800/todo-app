@@ -63,6 +63,7 @@ const styles = StyleSheet.create({
   centeredView: {
     width: "100%",
     height: "100%",
+
     justifyContent: "center",
     alignItems: "center",
     marginTop: 22,

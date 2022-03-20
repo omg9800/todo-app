@@ -24,7 +24,7 @@ const Item = ({ item, onDelete }) => {
 const styles = StyleSheet.create({
   card: {
     width: "80%",
-    height: 50,
+    height: "auto",
 
     minHeight: 50,
     flexDirection: "row",
